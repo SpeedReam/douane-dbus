@@ -67,33 +67,6 @@ public:
         ::DBus::Message ret = invoke_method (call);
     }
 
-    std::vector< ::DBus::Struct< std::string, std::string, bool > > GetRules()
-    {
-        ::DBus::CallMessage call;
-        call.member("GetRules");
-        ::DBus::Message ret = invoke_method (call);
-        ::DBus::MessageIter ri = ret.reader();
-
-        std::vector< ::DBus::Struct< std::string, std::string, bool > > argout;
-        ri >> argout;
-        return argout;
-    }
-
-    bool DeleteRule(const std::string& rule_id)
-    {
-        ::DBus::CallMessage call;
-        ::DBus::MessageIter wi = call.writer();
-
-        wi << rule_id;
-        call.member("DeleteRule");
-        ::DBus::Message ret = invoke_method (call);
-        ::DBus::MessageIter ri = ret.reader();
-
-        bool argout;
-        ri >> argout;
-        return argout;
-    }
-
 
 public:
 
