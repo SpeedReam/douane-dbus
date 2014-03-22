@@ -5,6 +5,12 @@
   	<!-- Properties -->
     <property name="DaemonVersion" type="s" access="read"/>
     <!-- Methods -->
+    <method name="RegisterAsDialogProcess">
+      <arg type="s" name="process_id" direction="out"/>
+    </method>
+    <method name="UnregisterDialogProcess">
+      <arg type="s" name="process_id" direction="in"/>
+    </method>
     <method name="GetRules">
       <arg type="a(ssb)" name="rules" direction="out"/>
     </method>
@@ -12,8 +18,9 @@
       <arg type="s" name="rule_id" direction="in"/>
       <arg type="b" name="result" direction="out"/>
     </method>
-    <method name="GetActivitiesToBeValidated">
-      <arg type="a(ssss)" name="activities" direction="out"/>
-    </method>
+    <!-- Signals -->
+    <signal name="NewActivityToBeValidated">
+      <arg type="(ssss)" name="activity"/>
+    </signal>
   </interface>
 </node>

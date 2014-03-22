@@ -21,13 +21,24 @@ public:
     : ::DBus::InterfaceAdaptor("org.zedroot.Douane")
     {
         bind_property(DaemonVersion, "s", true, false);
+        register_method(Douane_adaptor, RegisterAsDialogProcess, _RegisterAsDialogProcess_stub);
+        register_method(Douane_adaptor, UnregisterDialogProcess, _UnregisterDialogProcess_stub);
         register_method(Douane_adaptor, GetRules, _GetRules_stub);
         register_method(Douane_adaptor, DeleteRule, _DeleteRule_stub);
-        register_method(Douane_adaptor, GetActivitiesToBeValidated, _GetActivitiesToBeValidated_stub);
     }
 
     ::DBus::IntrospectedInterface *introspect() const 
     {
+        static ::DBus::IntrospectedArgument RegisterAsDialogProcess_args[] = 
+        {
+            { "process_id", "s", false },
+            { 0, 0, 0 }
+        };
+        static ::DBus::IntrospectedArgument UnregisterDialogProcess_args[] = 
+        {
+            { "process_id", "s", true },
+            { 0, 0, 0 }
+        };
         static ::DBus::IntrospectedArgument GetRules_args[] = 
         {
             { "rules", "a(ssb)", false },
@@ -39,20 +50,22 @@ public:
             { "result", "b", false },
             { 0, 0, 0 }
         };
-        static ::DBus::IntrospectedArgument GetActivitiesToBeValidated_args[] = 
+        static ::DBus::IntrospectedArgument NewActivityToBeValidated_args[] = 
         {
-            { "activities", "a(ssss)", false },
+            { "activity", "(ssss)", false },
             { 0, 0, 0 }
         };
         static ::DBus::IntrospectedMethod Douane_adaptor_methods[] = 
         {
+            { "RegisterAsDialogProcess", RegisterAsDialogProcess_args },
+            { "UnregisterDialogProcess", UnregisterDialogProcess_args },
             { "GetRules", GetRules_args },
             { "DeleteRule", DeleteRule_args },
-            { "GetActivitiesToBeValidated", GetActivitiesToBeValidated_args },
             { 0, 0 }
         };
         static ::DBus::IntrospectedMethod Douane_adaptor_signals[] = 
         {
+            { "NewActivityToBeValidated", NewActivityToBeValidated_args },
             { 0, 0 }
         };
         static ::DBus::IntrospectedProperty Douane_adaptor_properties[] = 
@@ -82,19 +95,46 @@ public:
     /* methods exported by this interface,
      * you will have to implement them in your ObjectAdaptor
      */
+    virtual std::string RegisterAsDialogProcess() = 0;
+    virtual void UnregisterDialogProcess(const std::string& process_id) = 0;
     virtual std::vector< ::DBus::Struct< std::string, std::string, bool > > GetRules() = 0;
     virtual bool DeleteRule(const std::string& rule_id) = 0;
-    virtual std::vector< ::DBus::Struct< std::string, std::string, std::string, std::string > > GetActivitiesToBeValidated() = 0;
 
 public:
 
     /* signal emitters for this interface
      */
+    void NewActivityToBeValidated(const ::DBus::Struct< std::string, std::string, std::string, std::string >& arg1)
+    {
+        ::DBus::SignalMessage sig("NewActivityToBeValidated");
+        ::DBus::MessageIter wi = sig.writer();
+        wi << arg1;
+        emit_signal(sig);
+    }
 
 private:
 
     /* unmarshalers (to unpack the DBus message before calling the actual interface method)
      */
+    ::DBus::Message _RegisterAsDialogProcess_stub(const ::DBus::CallMessage &call)
+    {
+        ::DBus::MessageIter ri = call.reader();
+
+        std::string argout1 = RegisterAsDialogProcess();
+        ::DBus::ReturnMessage reply(call);
+        ::DBus::MessageIter wi = reply.writer();
+        wi << argout1;
+        return reply;
+    }
+    ::DBus::Message _UnregisterDialogProcess_stub(const ::DBus::CallMessage &call)
+    {
+        ::DBus::MessageIter ri = call.reader();
+
+        std::string argin1; ri >> argin1;
+        UnregisterDialogProcess(argin1);
+        ::DBus::ReturnMessage reply(call);
+        return reply;
+    }
     ::DBus::Message _GetRules_stub(const ::DBus::CallMessage &call)
     {
         ::DBus::MessageIter ri = call.reader();
@@ -111,16 +151,6 @@ private:
 
         std::string argin1; ri >> argin1;
         bool argout1 = DeleteRule(argin1);
-        ::DBus::ReturnMessage reply(call);
-        ::DBus::MessageIter wi = reply.writer();
-        wi << argout1;
-        return reply;
-    }
-    ::DBus::Message _GetActivitiesToBeValidated_stub(const ::DBus::CallMessage &call)
-    {
-        ::DBus::MessageIter ri = call.reader();
-
-        std::vector< ::DBus::Struct< std::string, std::string, std::string, std::string > > argout1 = GetActivitiesToBeValidated();
         ::DBus::ReturnMessage reply(call);
         ::DBus::MessageIter wi = reply.writer();
         wi << argout1;

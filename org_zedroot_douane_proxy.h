@@ -20,6 +20,7 @@ public:
     Douane_proxy()
     : ::DBus::InterfaceProxy("org.zedroot.Douane")
     {
+        connect_signal(Douane_proxy, NewActivityToBeValidated, _NewActivityToBeValidated_stub);
     }
 
 public:
@@ -44,6 +45,28 @@ public:
     /* methods exported by this interface,
      * this functions will invoke the corresponding methods on the remote objects
      */
+    std::string RegisterAsDialogProcess()
+    {
+        ::DBus::CallMessage call;
+        call.member("RegisterAsDialogProcess");
+        ::DBus::Message ret = invoke_method (call);
+        ::DBus::MessageIter ri = ret.reader();
+
+        std::string argout;
+        ri >> argout;
+        return argout;
+    }
+
+    void UnregisterDialogProcess(const std::string& process_id)
+    {
+        ::DBus::CallMessage call;
+        ::DBus::MessageIter wi = call.writer();
+
+        wi << process_id;
+        call.member("UnregisterDialogProcess");
+        ::DBus::Message ret = invoke_method (call);
+    }
+
     std::vector< ::DBus::Struct< std::string, std::string, bool > > GetRules()
     {
         ::DBus::CallMessage call;
@@ -71,28 +94,25 @@ public:
         return argout;
     }
 
-    std::vector< ::DBus::Struct< std::string, std::string, std::string, std::string > > GetActivitiesToBeValidated()
-    {
-        ::DBus::CallMessage call;
-        call.member("GetActivitiesToBeValidated");
-        ::DBus::Message ret = invoke_method (call);
-        ::DBus::MessageIter ri = ret.reader();
-
-        std::vector< ::DBus::Struct< std::string, std::string, std::string, std::string > > argout;
-        ri >> argout;
-        return argout;
-    }
-
 
 public:
 
     /* signal handlers for this interface
      */
+    virtual void NewActivityToBeValidated(const ::DBus::Struct< std::string, std::string, std::string, std::string >& activity) = 0;
 
 private:
 
     /* unmarshalers (to unpack the DBus message before calling the actual signal handler)
      */
+    void _NewActivityToBeValidated_stub(const ::DBus::SignalMessage &sig)
+    {
+        ::DBus::MessageIter ri = sig.reader();
+
+        ::DBus::Struct< std::string, std::string, std::string, std::string > activity;
+        ri >> activity;
+        NewActivityToBeValidated(activity);
+    }
 };
 
 } } 
