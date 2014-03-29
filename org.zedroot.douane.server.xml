@@ -5,12 +5,6 @@
   	<!-- Properties -->
     <property name="DaemonVersion" type="s" access="read"/>
     <!-- Methods -->
-    <method name="RegisterAsDialogProcess">
-      <arg type="s" name="process_id" direction="out"/>
-    </method>
-    <method name="UnregisterDialogProcess">
-      <arg type="s" name="process_id" direction="in"/>
-    </method>
     <method name="GetRules">
       <arg type="a(ssb)" name="rules" direction="out"/>
     </method>

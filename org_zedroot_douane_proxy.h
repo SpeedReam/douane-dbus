@@ -45,28 +45,6 @@ public:
     /* methods exported by this interface,
      * this functions will invoke the corresponding methods on the remote objects
      */
-    std::string RegisterAsDialogProcess()
-    {
-        ::DBus::CallMessage call;
-        call.member("RegisterAsDialogProcess");
-        ::DBus::Message ret = invoke_method (call);
-        ::DBus::MessageIter ri = ret.reader();
-
-        std::string argout;
-        ri >> argout;
-        return argout;
-    }
-
-    void UnregisterDialogProcess(const std::string& process_id)
-    {
-        ::DBus::CallMessage call;
-        ::DBus::MessageIter wi = call.writer();
-
-        wi << process_id;
-        call.member("UnregisterDialogProcess");
-        ::DBus::Message ret = invoke_method (call);
-    }
-
 
 public:
 
