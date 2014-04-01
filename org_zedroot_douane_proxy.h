@@ -45,13 +45,13 @@ public:
     /* methods exported by this interface,
      * this functions will invoke the corresponding methods on the remote objects
      */
-    void CreateRule(const std::string& rule_id, const bool& allowed)
+    void CreateRule(const std::string& rule_id, const bool& allow)
     {
         ::DBus::CallMessage call;
         ::DBus::MessageIter wi = call.writer();
 
         wi << rule_id;
-        wi << allowed;
+        wi << allow;
         call.member("CreateRule");
         ::DBus::Message ret = invoke_method (call);
     }

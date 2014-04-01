@@ -42,7 +42,7 @@ public:
         static ::DBus::IntrospectedArgument CreateRule_args[] = 
         {
             { "rule_id", "s", true },
-            { "allowed", "b", true },
+            { "allow", "b", true },
             { 0, 0, 0 }
         };
         static ::DBus::IntrospectedArgument NewActivityToBeValidated_args[] = 
@@ -91,7 +91,7 @@ public:
      */
     virtual std::vector< ::DBus::Struct< std::string, std::string, bool > > GetRules() = 0;
     virtual bool DeleteRule(const std::string& rule_id) = 0;
-    virtual void CreateRule(const std::string& rule_id, const bool& allowed) = 0;
+    virtual void CreateRule(const std::string& rule_id, const bool& allow) = 0;
 
 public:
 

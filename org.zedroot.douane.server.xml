@@ -14,7 +14,7 @@
     </method>
     <method name="CreateRule">
       <arg type="s" name="rule_id" direction="in"/>
-      <arg type="b" name="allowed" direction="in"/>
+      <arg type="b" name="allow" direction="in"/>
     </method>
     <!-- Signals -->
     <signal name="NewActivityToBeValidated">
