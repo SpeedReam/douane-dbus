@@ -12,6 +12,10 @@
       <arg type="s" name="rule_id" direction="in"/>
       <arg type="b" name="result" direction="out"/>
     </method>
+    <method name="CreateRule">
+      <arg type="s" name="rule_id" direction="in"/>
+      <arg type="b" name="allowed" direction="in"/>
+    </method>
     <!-- Signals -->
     <signal name="NewActivityToBeValidated">
       <arg type="(ssss)" name="activity"/>

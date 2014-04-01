@@ -23,6 +23,7 @@ public:
         bind_property(DaemonVersion, "s", true, false);
         register_method(Douane_adaptor, GetRules, _GetRules_stub);
         register_method(Douane_adaptor, DeleteRule, _DeleteRule_stub);
+        register_method(Douane_adaptor, CreateRule, _CreateRule_stub);
     }
 
     ::DBus::IntrospectedInterface *introspect() const 
@@ -38,6 +39,12 @@ public:
             { "result", "b", false },
             { 0, 0, 0 }
         };
+        static ::DBus::IntrospectedArgument CreateRule_args[] = 
+        {
+            { "rule_id", "s", true },
+            { "allowed", "b", true },
+            { 0, 0, 0 }
+        };
         static ::DBus::IntrospectedArgument NewActivityToBeValidated_args[] = 
         {
             { "activity", "(ssss)", false },
@@ -47,6 +54,7 @@ public:
         {
             { "GetRules", GetRules_args },
             { "DeleteRule", DeleteRule_args },
+            { "CreateRule", CreateRule_args },
             { 0, 0 }
         };
         static ::DBus::IntrospectedMethod Douane_adaptor_signals[] = 
@@ -83,6 +91,7 @@ public:
      */
     virtual std::vector< ::DBus::Struct< std::string, std::string, bool > > GetRules() = 0;
     virtual bool DeleteRule(const std::string& rule_id) = 0;
+    virtual void CreateRule(const std::string& rule_id, const bool& allowed) = 0;
 
 public:
 
@@ -119,6 +128,16 @@ private:
         ::DBus::ReturnMessage reply(call);
         ::DBus::MessageIter wi = reply.writer();
         wi << argout1;
+        return reply;
+    }
+    ::DBus::Message _CreateRule_stub(const ::DBus::CallMessage &call)
+    {
+        ::DBus::MessageIter ri = call.reader();
+
+        std::string argin1; ri >> argin1;
+        bool argin2; ri >> argin2;
+        CreateRule(argin1, argin2);
+        ::DBus::ReturnMessage reply(call);
         return reply;
     }
 };
